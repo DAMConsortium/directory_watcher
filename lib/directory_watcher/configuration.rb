@@ -60,6 +60,12 @@ class DirectoryWatcher::Configuration
   # This option may not be changed once the DirectoryWatcher is allocated.
   #
   attr_reader :scanner
+  
+  # The back end collecto to use. The available options are:
+  #
+  #   nil     => Use the default.
+  #   :ohm    => Use the Ohm based collector. This requires that redis and the 'Ohm'
+  #              gem be installed
   attr_reader :collector
 
   # The sorting method to use when emitting a set of Events after a Scan has
@@ -90,7 +96,7 @@ class DirectoryWatcher::Configuration
   # The Queue through which the Collector will send data to the Notifier
   #
   attr_reader :notification_queue
-
+  
   # Return a Hash of all the default options
   #
   def self.default_options
@@ -115,6 +121,7 @@ class DirectoryWatcher::Configuration
     @dir      = o[:dir]
     @pre_load = o[:pre_load]
     @scanner  = o[:scanner]
+    @collector = o[:collector]
     @sort_by  = o[:sort_by]
     @order_by = o[:order_by]
 
@@ -141,10 +148,13 @@ class DirectoryWatcher::Configuration
     klass = DirectoryWatcher.const_get( class_name ) rescue Scanner
   end
 
+  # The class of the collector
+  #
   def collector_class
     class_name = collector.to_s.capitalize + 'Collector'
     klass = DirectoryWatcher.const_get( class_name ) rescue Collector
   end
+  
   # call-seq:
   #    glob = '*'
   #    glob = ['lib/**/*.rb', 'test/**/*.rb']
