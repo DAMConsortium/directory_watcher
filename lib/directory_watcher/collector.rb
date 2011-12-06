@@ -113,8 +113,8 @@ class DirectoryWatcher::Collector
   # io - The IO object to write the document to.
   #
   # Returns nothing.
-  def dump_stats( io )
-    YAML.dump(@stats, io)
+  def dump_stats( persist )
+    File.open(persist, 'w') { |fd| YAML.dump(@stats, fd) }
   end
 
   # Read the current stats from the given IO object. Any existing stats in the
@@ -123,8 +123,8 @@ class DirectoryWatcher::Collector
   # io - The IO object from which to read the document.
   #
   # Returns nothing.
-  def load_stats( io )
-    @stats = YAML.load(io)
+  def load_stats( persist )
+    File.open(persist, 'r') { |fd| @stats = YAML.load( io ) } if test(?f, persist)
   end
 
   #######

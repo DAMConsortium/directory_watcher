@@ -144,7 +144,7 @@ class DirectoryWatcher::OhmCollector
   # io - The IO object to write the document to.
   #
   # Returns nothing.
-  def dump_stats( io )
+  def dump_stats( persist )
     @stats.each { |path, fs| transfer_fs_to_ofs( fs, OhmFileStat.find(:path => path).first ).save }
   end
 
@@ -154,7 +154,7 @@ class DirectoryWatcher::OhmCollector
   # io - The IO object from which to read the document.
   #
   # Returns nothing.
-  def load_stats( io )
+  def load_stats( persist )
     logger.info 'Loading Stored File Stats'
     ofsc = 0
     OhmFileStat.all.each do |ofs|

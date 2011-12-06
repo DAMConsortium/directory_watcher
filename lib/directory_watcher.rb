@@ -436,7 +436,7 @@ class DirectoryWatcher
   #
   def persist!
     return if running?
-    File.open(persist, 'w') { |fd| @collector.dump_stats(fd) } if persist?
+    @collector.dump_stats(persist?) if persist?  
     self
   end
 
