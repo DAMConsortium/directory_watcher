@@ -1,5 +1,13 @@
+begin
+  require 'ohm'
+  DirectoryWatcher::HAVE_OHM = true
+rescue LoadError
+  DirectoryWatcher::HAVE_OHM = false
+end
+
+if DirectoryWatcher::HAVE_OHM
 require 'set'
-require 'ohm'
+
 
 class OhmFileStat < Ohm::Model
   attribute :path
@@ -262,4 +270,6 @@ class DirectoryWatcher::OhmCollector
     return ohmfs
   end  
   
+end
+
 end
