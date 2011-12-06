@@ -452,7 +452,8 @@ class DirectoryWatcher
   #
   def load!
     return if running?
-    File.open(persist, 'r') { |fd| @collector.load_stats(fd) } if persist? and test(?f, persist)
+    logger.debug "LOAD! #{persist?}"
+    @collector.load_stats(persist?) if persist?
     self
   end
 
