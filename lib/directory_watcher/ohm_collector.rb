@@ -18,11 +18,6 @@ class OhmFileStat < Ohm::Model
   end
 end
 
-class OhmFileEvent < Ohm::Model
-    attribute :type
-    reference :file, AssetFileStat
-end
-
 # Collector reads items from a collection Queue and processes them to see if
 # FileEvents should be put onto the notification Queue.
 #
@@ -49,14 +44,10 @@ class DirectoryWatcher::OhmCollector
     @stable_counts = Hash.new(0)
     @config = config
     
-    Ohm.connect
-    
-    
+    Ohm.connect    
     
     on_scan( DirectoryWatcher::Scan.new( config.glob ), false ) if config.pre_load?
     self.interval = 0.01 # yes this is a fast loop
-  
-    
   end
 
   # The number of times we see a file hasn't changed before emitting a stable
@@ -119,7 +110,7 @@ class DirectoryWatcher::OhmCollector
   # Returns nothing
   def on_stat( stat, emit_event = true )
     orig_stat = update_stat( stat )
-    logger.debug "Emitting event for #{stat}"
+    logger.debug "Emitting event for #{stat} Previous: #{orig_stat}"
     emit_event_for( orig_stat, stat ) if emit_event
   end
 
@@ -213,7 +204,7 @@ class DirectoryWatcher::OhmCollector
     logger.debug "#{event} \nfrom #{old_stat}\n  to #{new_stat}"
     if should_emit?(event) then
       notification_queue.enq event 
-      transfer_fs_to_ofs( new_stat, OhmFileStat.find(:path => new_stat.path).first ).save
+      transfer_fs_to_ofs( new_stat, OhmFileStat.find( :path => new_stat.path ).first ).save
     end
   end
 
