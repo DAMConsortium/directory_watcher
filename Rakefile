@@ -21,6 +21,8 @@ Bones {
   depend_on  'eventmachine', :development => true
   depend_on  'cool.io'     , :development => true
 
+  depend_on  'ohm'         , :development => true
+
   depend_on 'bones-git'  , '~> 1.2.4', :development => true
   depend_on 'bones-rspec', '~> 2.0.1', :development => true
   depend_on 'rspec'      , '~> 2.7.0', :development => true
