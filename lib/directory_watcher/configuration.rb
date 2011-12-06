@@ -60,6 +60,7 @@ class DirectoryWatcher::Configuration
   # This option may not be changed once the DirectoryWatcher is allocated.
   #
   attr_reader :scanner
+  attr_reader :collector
 
   # The sorting method to use when emitting a set of Events after a Scan has
   # happened. Since a Scan may produce a number of events, if those Events should
@@ -101,6 +102,7 @@ class DirectoryWatcher::Configuration
       :pre_load      => false,
       :persist       => nil,
       :scanner       => nil,
+      :collector     => nil,
       :sort_by       => :path,
       :order_by      => :ascending,
     }
@@ -139,6 +141,10 @@ class DirectoryWatcher::Configuration
     klass = DirectoryWatcher.const_get( class_name ) rescue Scanner
   end
 
+  def collector_class
+    class_name = collector.to_s.capitalize + 'Collector'
+    klass = DirectoryWatcher.const_get( class_name ) rescue Collector
+  end
   # call-seq:
   #    glob = '*'
   #    glob = ['lib/**/*.rb', 'test/**/*.rb']

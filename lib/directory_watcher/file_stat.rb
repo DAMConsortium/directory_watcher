@@ -54,6 +54,7 @@ class DirectoryWatcher::FileStat
   def eql?( other )
     return false unless other.instance_of? self.class
     self.mtime == other.mtime and self.size == other.size
+    self.mtime.to_s == other.mtime.to_s and self.size == other.size
   end
   alias :== :eql?
 

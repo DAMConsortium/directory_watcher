@@ -300,7 +300,7 @@ class DirectoryWatcher
     setup_dir(config.dir)
 
     @notifier = Notifier.new(config, @observer_peers)
-    @collector = Collector.new(config)
+    @collector = config.collector_class.new(config)
     @scanner = config.scanner_class.new(config)
   end
 
@@ -600,6 +600,8 @@ class DirectoryWatcher
 end  # class DirectoryWatcher
 
 DirectoryWatcher.lib_path {
+  require 'directory_watcher/collector'
+  require 'directory_watcher/ohm_collector'
   require 'directory_watcher/scanner'
   require 'directory_watcher/eventable_scanner'
   require 'directory_watcher/coolio_scanner'
